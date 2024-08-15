@@ -1,5 +1,4 @@
-const mysql = require('mysql2');
-
+import mysql from 'mysql2';
 // Cria a conexão com o banco de dados
 const connection = mysql.createConnection({
   host: 'localhost', // substitua pelo host do seu banco de dados
@@ -18,11 +17,7 @@ connection.connect((err) => {
   console.log('Conectado ao banco de dados como id ' + connection.threadId);
 });
 
-// Exemplo de consulta
-connection.query('SELECT * FROM produtos', (error, results, fields) => {
-  if (error) throw error;
-  console.log('Resultados da consulta:', results);
-});
 
-// Fecha a conexão
-connection.end();
+
+export default connection;
+
