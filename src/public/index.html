@@ -108,6 +108,7 @@
         const produtos = await response.json();
         produtosTable.innerHTML = '';
         produtos.forEach(produto => {
+          produto.id = produto.codigo;
           const row = produtosTable.insertRow();
           row.insertCell(0).innerText = produto.id;
           row.insertCell(1).innerText = produto.nome;
