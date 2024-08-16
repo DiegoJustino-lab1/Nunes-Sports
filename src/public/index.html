@@ -137,8 +137,11 @@
       };
 
       // Função para deletar produto
-      const deletarProduto = async (id) => {
-        await fetch(`/api/produtos/${id}`, { method: 'DELETE' });
+      const deletarProduto = async (codigo) => {
+        console.log(codigo);
+        
+       const test=  await fetch(`/api/produtos/${codigo}`, { method: 'DELETE' });
+       console.log(test);
         carregarProdutos();
       };
 

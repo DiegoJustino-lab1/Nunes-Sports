@@ -28,6 +28,7 @@ router.get('/produtos', (req, res) => {
 
 // Update - Atualizar um produto existente
 router.put('/produtos/:codigo', (req, res) => {
+    console.log(req.params);
     const { codigo } = req.params;
     const { nome, descricao, preco } = req.body;
     const query = 'UPDATE produtos SET nome = ?, descricao = ?, preco = ? WHERE codigo = ?';
@@ -41,14 +42,21 @@ router.put('/produtos/:codigo', (req, res) => {
 
 // Delete - Deletar um produto
 router.delete('/produtos/:codigo', (req, res) => {
+    console.log(req.params);   
     const { codigo } = req.params;
     const query = 'DELETE FROM produtos WHERE codigo = ?';
+  
     db.query(query, [codigo], (err, result) => {
-      if (err) {
-        return res.status(500).send(err);
-      }
-      res.status(200).send({ message: 'Produto deletado com sucesso' });
+        if (err) {
+          return res.status(500).send(err);
+        }
+        res.status(200).send({ message: 'Produto deletado com sucesso' });
     });
+    
+  
+
+   
+  
   });
 
 export default router;
