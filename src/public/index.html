@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRUD de Produtos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      width: 80%;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+    th {
+      background-color: #007bff;
+      color: #fff;
+    }
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+  </style>
+
+
+</head>
+<body>
+  <h1>CRUD de Produtos</h1>
+  <table id="produtosTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Código</th>
+        <th>Descrição</th>
+        <th>Preço</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Produtos serão inseridos aqui -->
+    </tbody>
+  </table>
+  <h2>Adicionar Produto</h2>
+  <form id="produtoForm">
+    <input type="hidden" id="produtoId">
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" required>
+    <label for="codigo">Código:</label>
+    <input type="text" id="codigo" required>
+    <label for="descricao">Descrição:</label>
+    <input type="text" id="descricao" required>
+    <label for="preco">Preço:</label>
+    <input type="number" id="preco" required>
+    <button type="submit">Salvar</button>
+  </form>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const produtosTable = document.getElementById('produtosTable').getElementsByTagName('tbody')[0];
+      const produtoForm = document.getElementById('produtoForm');
+      const produtoId = document.getElementById('produtoId');
+      const nome = document.getElementById('nome');
+      const codigo = document.getElementById('codigo');
+      const descricao = document.getElementById('descricao');
+      const preco = document.getElementById('preco');
+
+      // Função para carregar produtos
+      const carregarProdutos = async () => {
+        const response = await fetch('/api/produtos');
+        const produtos = await response.json();
+        produtosTable.innerHTML = '';
+        produtos.forEach(produto => {
+          const row = produtosTable.insertRow();
+          row.insertCell(0).innerText = produto.id;
+          row.insertCell(1).innerText = produto.nome;
+          row.insertCell(2).innerText = produto.codigo;
+          row.insertCell(3).innerText = produto.descricao;
+          row.insertCell(4).innerText = produto.preco;
+          const actionsCell = row.insertCell(5);
+          const editButton = document.createElement('button');
+          editButton.innerText = 'Editar';
+          editButton.onclick = () => editarProduto(produto);
+          actionsCell.appendChild(editButton);
+          const deleteButton = document.createElement('button');
+          deleteButton.innerText = 'Deletar';
+          deleteButton.onclick = () => deletarProduto(produto.id);
+          actionsCell.appendChild(deleteButton);
+        });
+      };
+
+      // Função para editar produto
+      const editarProduto = (produto) => {
+        produtoId.value = produto.id;
+        nome.value = produto.nome;
+        codigo.value = produto.codigo;
+        descricao.value = produto.descricao;
+        preco.value = produto.preco;
+      };
+
+      // Função para deletar produto
+      const deletarProduto = async (id) => {
+        await fetch(`/api/produtos/${id}`, { method: 'DELETE' });
+        carregarProdutos();
+      };
+
+      // Função para salvar produto
+      produtoForm.onsubmit = async (event) => {
+        event.preventDefault();
+        const produto = {
+          nome: nome.value,
+          codigo: codigo.value,
+          descricao: descricao.value,
+          preco: preco.value
+        };
+        if (produtoId.value) {
+          await fetch(`/api/produtos/${produtoId.value}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(produto)
+          });
+        } else {
+          await fetch('/api/produtos', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(produto)
+          });
+        }
+        produtoForm.reset();
+        carregarProdutos();
+      };
+
+      // Carregar produtos ao carregar a página
+      carregarProdutos();
+    });
+  </script>
+</body>
+</html>
