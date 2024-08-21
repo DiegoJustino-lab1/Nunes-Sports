@@ -1,3 +1,8 @@
+Fora utilizadas as tecnologias Xampp (para startar o Apache e administrar o banco de dados MySql), Mysql, NodeJS, Html e css.
+
+
+
+
 1. Neste desafio a pessoa candidata terá total liberdade de usar as ferramentas e linguagens que está mais familiarizado.
 O objetivo principal será identificar sua criatividade e a capacidade de resolver um problema, principalmente o potencial de implementação, qualidade de código, organização, boas práticas, conceitos de Clean Code, SOLID e preocupação com desenvolvimento para grandes volumes transacionais.
 Você é responsável por desenvolver a solução, definir o modelo de entrega, utilizando-se das ferramentas de mercado atuais, bem como por pensar em compartilhamento de código, versão de fontes etc. O desafio consiste em criar uma solução para atender um requisito de um projeto:
